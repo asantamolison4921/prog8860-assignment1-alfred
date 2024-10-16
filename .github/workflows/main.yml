@@ -14,7 +14,7 @@ on:
 jobs:
 
   docker_build:
-    name: Building docker image
+    name: Running steps
     runs-on: ubuntu-latest
 
     steps:
@@ -29,53 +29,11 @@ jobs:
     - name: Build Docker image
       run: docker-compose -f node-docker-app/docker-compose.yml build
 
-  docker_run:
-    name: Running docker container
-    runs-on: ubuntu-latest
-    needs: docker_build
-
-    steps:
-    - name: Checkout repository
-      uses: actions/checkout@v2
-
-    - name: Install Docker Compose
-      run: |
-        sudo apt-get update
-        sudo apt-get install -y docker-compose
-
     - name: Run Docker container
       run: docker-compose -f node-docker-app/docker-compose.yml up -d
 
-  show_containers:
-    name: List active docker containers
-    runs-on: ubuntu-latest
-    needs: docker_run
-
-    steps:
-    - name: Checkout repository
-      uses: actions/checkout@v2
-
-    - name: Install Docker
-      run: |
-        sudo apt-get update
-        sudo apt-get install -y docker
-
     - name: Show running containers
       run: docker ps
-
-  stop_container:
-    name: Stopping the container just created
-    runs-on: ubuntu-latest
-    needs: show_containers
-
-    steps:
-    - name: Checkout repository
-      uses: actions/checkout@v2
-
-    - name: Install Docker
-      run: |
-        sudo apt-get update
-        sudo apt-get install -y docker
 
     - name: Stop Docker container
       run: docker stop assignment1_container
